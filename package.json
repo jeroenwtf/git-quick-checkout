@@ -1,0 +1,18 @@
+{
+  "name": "git-quick-checkout",
+  "version": "1.0.0",
+  "description": "A command-line tool to list and checkout branches",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "dayjs": "^1.11.13",
+    "inquirer": "^12.3.0",
+    "simple-git": "^3.27.0"
+  }
+}
