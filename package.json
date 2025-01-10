@@ -8,6 +8,9 @@
   },
   "author": "",
   "type": "module",
+  "bin": {
+    "git-quick-checkout": "./index.js"
+  },
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.4.1",
