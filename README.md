@@ -13,6 +13,9 @@ A CLI tool to list and switch recent Git branches, sorted by the latest commit.
 - Checks for uncommitted changes before switching branches.
 
 
+<img src="screenshot.webp" />
+
+
 ## Installation
 
 ```bash
