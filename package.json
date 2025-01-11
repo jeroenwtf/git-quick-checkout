@@ -9,17 +9,22 @@
   },
   "type": "module",
   "bin": {
-    "git-quick-checkout": "./index.js"
+    "git-quick-checkout": "index.js"
   },
   "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jeroenwtf/git-quick-checkout.git"
+    "url": "git+https://github.com/jeroenwtf/git-quick-checkout.git"
   },
   "bugs": {
     "url": "https://github.com/jeroenwtf/git-quick-checkout/issues"
   },
-  "keywords": ["git", "cli", "tool", "branches"],
+  "keywords": [
+    "git",
+    "cli",
+    "tool",
+    "branches"
+  ],
   "homepage": "https://github.com/jeroenwtf/git-quick-checkout#readme",
   "preferGlobal": true,
   "dependencies": {
