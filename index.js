@@ -33,7 +33,6 @@ async function main() {
       process.exit(1);
     }
 
-    console.log(branches);
     const branchData = await Promise.all(
       branches.all.map(async (branch) => {
         try {
