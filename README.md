@@ -22,7 +22,20 @@ A CLI tool to list and switch recent Git branches, sorted by the latest commit.
 npm install -g git-quick-checkout
 ```
 
-My recommendation is to set an alias for it that works for you, like `git qco` or `gqc`.
+
+## Usage
+
+Use it in a directory with git with `git quick-checkout`.
+
+My recommendation is to set an alias for it that works for you, like `git qco`. In your `.gitconfig` file:
+
+```
+[alias]
+  co = checkout # Common alias, but not necessary
+  qco = quick-checkout # Add this one!
+```
+
+This way you just need to run `git qco` 🚀
 
 
 ## Contributing
