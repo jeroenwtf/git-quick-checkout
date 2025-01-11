@@ -2,7 +2,7 @@
 
 A CLI tool to list and switch recent Git branches, sorted by the latest commit.
 
-<img src="meme.jpg" width="300px" style="max-width: 300px; width: 100%" />
+<img src="meme.jpg" width="300px" />
 
 
 ## Features
