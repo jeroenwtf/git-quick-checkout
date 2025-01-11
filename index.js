@@ -1,12 +1,8 @@
 #!/usr/bin/env node
 
 import simpleGit from "simple-git";
-import inquirer from "inquirer";
+import select from "@inquirer/select";
 import chalk from "chalk";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime.js";
-
-dayjs.extend(relativeTime);
 
 const git = simpleGit();
 
@@ -25,6 +21,7 @@ async function main() {
     // Fetch branch list with last commit info
     const branches = await git.branchLocal();
     const currentBranch = branches.current;
+    let gitUserEmail = "";
 
     if (branches.all.length < 2) {
       console.warn(
@@ -32,6 +29,14 @@ async function main() {
       );
       process.exit(1);
     }
+
+    git.getConfig("user.email", (err, email) => {
+      if (err) {
+        console.error("Error getting git user email:", err);
+      } else {
+        gitUserEmail = email.value;
+      }
+    });
 
     const branchData = await Promise.all(
       branches.all.map(async (branch) => {
@@ -41,11 +46,14 @@ async function main() {
 
           return {
             branch,
-            commitAuthor: lastCommit?.author_name,
+            commitAuthor:
+              gitUserEmail == lastCommit?.author_email
+                ? "me"
+                : lastCommit?.author_name,
             commitMessage: lastCommit?.message || chalk.gray("no commits yet"),
             commitDate: lastCommit ? new Date(lastCommit.date) : null,
             formattedDate: lastCommit
-              ? dayjs(lastCommit.date).fromNow()
+              ? formatRelativeDate(lastCommit.date)
               : chalk.gray("no commits yet"),
           };
         } catch (err) {
@@ -74,26 +82,23 @@ async function main() {
     const branchList = sortedBranches.map(
       ({ branch, commitAuthor, commitMessage, formattedDate }) => {
         const lastCommit = `${commitMessage} (${formattedDate} by ${commitAuthor})`;
-        const current =
-          branch == currentBranch ? chalk.yellow("[current] ") : "";
+
         return {
-          name: `${chalk.bold(branch)} ${current}${chalk.gray(lastCommit)}`,
+          name: `${chalk.bold(branch)} ${chalk.gray(lastCommit)}`,
+          short: branch,
           value: branch,
+          disabled: branch == currentBranch && "[current]",
         };
       },
     );
 
     // Prompt user to select a branch
-    const { selectedBranch } = await inquirer.prompt([
-      {
-        type: "list",
-        name: "selectedBranch",
-        message: "Select a branch to checkout:",
-        choices: branchList,
-        pageSize: 10,
-        loop: false, // Prevent infinite looping
-      },
-    ]);
+    const selectedBranch = await select({
+      message: "Select a branch to checkout:",
+      choices: branchList,
+      loop: false,
+      pageSize: 10,
+    });
 
     // Checkout the selected branch
     await git.checkout(selectedBranch);
@@ -105,6 +110,42 @@ async function main() {
     }
     process.exit(1);
   }
+}
+
+function formatRelativeDate(dateString) {
+  const now = new Date();
+  const date = new Date(dateString); // Parse the input date string
+
+  // Calculate the difference in seconds
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+  if (Math.abs(diffInSeconds) < 60) {
+    return rtf.format(-diffInSeconds, "seconds");
+  }
+
+  if (Math.abs(diffInSeconds) < 3600) {
+    return rtf.format(-Math.floor(diffInSeconds / 60), "minutes");
+  }
+
+  if (Math.abs(diffInSeconds) < 86400) {
+    return rtf.format(-Math.floor(diffInSeconds / 3600), "hours");
+  }
+
+  if (Math.abs(diffInSeconds) < 604800) {
+    return rtf.format(-Math.floor(diffInSeconds / 86400), "days");
+  }
+
+  if (Math.abs(diffInSeconds) < 2629746) {
+    return rtf.format(-Math.floor(diffInSeconds / 604800), "weeks");
+  }
+
+  if (Math.abs(diffInSeconds) < 31556952) {
+    return rtf.format(-Math.floor(diffInSeconds / 2629746), "months");
+  }
+
+  return rtf.format(-Math.floor(diffInSeconds / 31556952), "years");
 }
 
 main();

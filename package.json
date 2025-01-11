@@ -1,6 +1,6 @@
 {
   "name": "git-quick-checkout",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A command-line tool to list and checkout branches",
   "author": "Jeroen van Meerendonk <hola@jeroen.wtf> (https://jeroen.wtf)",
   "main": "index.js",
@@ -28,9 +28,8 @@
   "homepage": "https://github.com/jeroenwtf/git-quick-checkout#readme",
   "preferGlobal": true,
   "dependencies": {
+    "@inquirer/select": "^4.0.4",
     "chalk": "^5.4.1",
-    "dayjs": "^1.11.13",
-    "inquirer": "^12.3.0",
     "simple-git": "^3.27.0"
   }
 }
