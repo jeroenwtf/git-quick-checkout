@@ -13,7 +13,6 @@ const git = simpleGit();
 async function main() {
   try {
     // Check for uncommitted changes
-    const currentBranch = (await git.status()).current;
     const status = await git.status();
     if (status.files.length > 0) {
       console.error(chalk.red("Error: You have uncommitted changes."));
@@ -25,6 +24,16 @@ async function main() {
 
     // Fetch branch list with last commit info
     const branches = await git.branchLocal();
+    const currentBranch = branches.current;
+
+    if (branches.all.length < 2) {
+      console.warn(
+        chalk.yellow(`Error: You only have one branch (${currentBranch}).`),
+      );
+      process.exit(1);
+    }
+
+    console.log(branches);
     const branchData = await Promise.all(
       branches.all.map(async (branch) => {
         try {
@@ -65,7 +74,7 @@ async function main() {
     // Format branches for the prompt
     const branchList = sortedBranches.map(
       ({ branch, commitAuthor, commitMessage, formattedDate }) => {
-        const lastCommit = `- ${formattedDate} by ${commitAuthor}: ${commitMessage}`;
+        const lastCommit = `${commitMessage} (${formattedDate} by ${commitAuthor})`;
         const current =
           branch == currentBranch ? chalk.yellow("[current] ") : "";
         return {
@@ -93,7 +102,6 @@ async function main() {
     if (error instanceof Error && error.name === "ExitPromptError") {
       console.log(chalk.gray("Bye!"));
     } else {
-      // Rethrow unknown errors
       console.error(chalk.red("An error occurred:"), error.message);
     }
     process.exit(1);

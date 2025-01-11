@@ -1,17 +1,27 @@
 {
   "name": "git-quick-checkout",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "A command-line tool to list and checkout branches",
+  "author": "Jeroen van Meerendonk <hola@jeroen.wtf> (https://jeroen.wtf)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
   "type": "module",
   "bin": {
     "git-quick-checkout": "./index.js"
   },
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeroenwtf/git-quick-checkout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jeroenwtf/git-quick-checkout/issues"
+  },
+  "keywords": ["git", "cli", "tool", "branches"],
+  "homepage": "https://github.com/jeroenwtf/git-quick-checkout#readme",
+  "preferGlobal": true,
   "dependencies": {
     "chalk": "^5.4.1",
     "dayjs": "^1.11.13",
